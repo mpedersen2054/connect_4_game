@@ -12,6 +12,7 @@ var Peice = function(opts) {
     this.peice = $('<div/>')
         .addClass(`peice ${this.color}`)
         .css({
+            position: 'absolute',
             width: `${this.peiceSize}px`,
             height: `${this.peiceSize}px`,
             left: `${this.leftPos}px`,
