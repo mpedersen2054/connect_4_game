@@ -1,2 +1,22 @@
-* {
-  color: green; }
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0; }
+
+.game-col {
+  padding: 20px; }
+
+.peice-placer {
+  border: 1px solid green;
+  position: relative;
+  max-width: 700px;
+  height: 100px; }
+
+.board {
+  border: 1px solid yellow;
+  position: relative;
+  max-width: 700px;
+  height: 700px;
+  background-image: url(http://connect4.gamesolver.org/image?pos=null);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center; }
