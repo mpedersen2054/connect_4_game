@@ -20,3 +20,12 @@
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center; }
+
+.game-meta-col {
+  padding: 20px 0; }
+
+.title-image {
+  font-size: 56px; }
+
+.player {
+  margin: 10px 0; }
