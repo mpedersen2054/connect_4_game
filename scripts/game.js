@@ -2,12 +2,13 @@
 var Game = function(opts) {
     // this.player1 = opts.player1 || new Player({ prompt: 'Name of the first player?' })
     // this.player2 = opts.player2 || new Player({ prompt: 'Name of the second player?' })
-    this.player1 = new Player({ name: 'Matt', wins: 0, isTurn: false })
-    this.player2 = new Player({ name: 'Enemy', wins: 0, isTurn: false })
+    this.player1 = new Player({ id: 1, name: 'Matt', wins: 0, isTurn: false })
+    this.player2 = new Player({ id: 2, name: 'Enemy', wins: 0, isTurn: false })
     this.board = new Board()
 }
 
 Game.prototype.init = function() {
+    // append the html for the game onto DOM
     var startingHtml = `
         <div class="container-fluid">
             <div class="row no-gutters">
@@ -59,13 +60,9 @@ Game.prototype.init = function() {
                     </div>
                 </div>
             </div>
-        </div>
-    `
+        </div>`
     $('#main').append(startingHtml)
-    this.player1.isTurn = true
-    this.turn(this.player1)
-}
 
-Game.prototype.turn = function(player) {
-    var peice = new Peice({ color: 'red' })
+    // initiate the turn for the first player
+    this.board.turn(this.player1)
 }
