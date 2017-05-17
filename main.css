@@ -21,6 +21,18 @@
   background-size: contain;
   background-position: center; }
 
+.peice {
+  position: absolute;
+  top: 2.25px;
+  left: 5px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%; }
+  .peice.red {
+    background-color: red; }
+  .peice.black {
+    background-color: black; }
+
 .game-meta-col {
   padding: 20px 0; }
 
