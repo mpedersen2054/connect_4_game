@@ -119,37 +119,43 @@ Board.prototype.dropPeice = function(peice) {
         // console.log('drop the peice here', yPos - 5, xPos)
         this.board[yPos - 5][xPos] = whoseTurn
         peice.move('down', yPos - 5)
-
-    // check if the 6 rows above bottom has a peice
     }
-    // CONNECT 4 IS ONLY 6 HEIGHT???
-    // else if (this.board[yPos - 6][xPos] === 0) {
-    //     // console.log('drop the peice here', yPos - 6, xPos)
-    //     this.board[yPos - 6][xPos] = whoseTurn
-    //     peice.move('down', yPos - 6)
-    //
-    // // that x cord of the board is full
-    // }
+    // if the column is full
     else {
         console.log('cant move at the x pos')
         switchTurns = false
     }
 
+    // run only as long as the column isnt full
     if (switchTurns) {
+        var self = this
         // dont want to turn it off if switchTurn = false,
         // if they try to put peice above top wont allow
         $('body').off()
-        // switch whose turn it is
-        if (this.player1.isTurn) {
-            this.player1.isTurn = false
-            this.player2.isTurn = true
-        } else if (this.player2.isTurn) {
-            this.player1.isTurn = true
-            this.player2.isTurn = false
-        }
-        // incrment turns and call new turn
-        this.turns++
-        this.turn()
+        // check if there are 4 connected for the give user
+        this.checkIfConnect(function(statemate, isOver, winner) {
+            console.log('inside check if connect!')
+            console.log('stalemate?', statemate)
+            console.log('isOver?', isOver)
+            // switch whose turn it is
+            if (self.player1.isTurn) {
+                self.player1.isTurn = false
+                self.player2.isTurn = true
+            } else if (self.player2.isTurn) {
+                self.player1.isTurn = true
+                self.player2.isTurn = false
+            }
+            // incrment turns and call new turn
+            self.turns++
+            self.turn()
+        })
     }
 
+}
+
+Board.prototype.checkIfConnect = function(callback) {
+    console.log('isside of checkIfConnect!')
+    setTimeout(function() {
+        callback(null, null)
+    }, 1000)
 }
