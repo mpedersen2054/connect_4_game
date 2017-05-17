@@ -26,4 +26,11 @@ Peice.prototype.move = function(direction) {
             left: `${this.leftPos}px`
         })
     }
+    if (direction === 'left') {
+        console.log('moving left')
+        this.leftPos = this.leftPos - this.movementAmt
+        this.peice.css({
+            left: `${this.leftPos}px`
+        })
+    }
 }
