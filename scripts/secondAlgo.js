@@ -15,6 +15,7 @@ var checkId = 2
 function checker(y, x) {
     console.log('checking from point', [y, x])
     var count = 1
+    var connectArr = [ [y, x] ]
 
     // going to check clockwise starting at 12:00
 
@@ -25,40 +26,42 @@ function checker(y, x) {
 
     // check up right
     // [y - 1][x + 1]
-    if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId) {}
+    if (board[y - 1][x + 1] === checkId) {}
 
     // check right
     // [y][x + 1]
-    if (board[y][x + 1] && board[y][x + 1] === checkId) {}
+    if (board[y][x + 1] === checkId) {}
 
     // check down right
     // [y + 1][x + 1]
-    if (board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
+    if (board[y + 1][x + 1] === checkId) {
         console.log('THE NEXT DOWN RIGHT IS A MATCH!')
         for (var k = 1; k < 4; k++) {
             if (board[y + k][x + k] === checkId) {
+                connectArr.push([y + k, x + k])
                 count++
             } else {
                 count = 1
+                break
             }
         }
     }
 
     // check down
     // [y + 1][x]
-    if (board[y + 1] && board[y + 1][x] === checkId) {}
+    if (board[y + 1][x] === checkId) {}
 
     // check down left
     // [y + 1][x - 1]
-    if (board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {}
+    if (board[y + 1][x - 1] === checkId) {}
 
     // check left
     // [y][x - 1]
-    if (board[y][x - 1] && board[y][x - 1] === checkId) {}
+    if (board[y][x - 1] === checkId) {}
 
     // check up left
     // [y - 1][x - 1]
-    if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1] === checkId) {
+    if (board[y - 1][x - 1] === checkId) {
         console.log('THE NEXT UP LEFT IS A MATCH!')
     }
 
@@ -66,6 +69,7 @@ function checker(y, x) {
     // check the count
     if (count === 4) {
         console.log('VICTORY!!!')
+        console.log('CONNECT ARR: ', connectArr)
     } else {
         console.log('LOSE!!!')
     }
