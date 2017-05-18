@@ -154,6 +154,16 @@ Board.prototype.dropPeice = function(peice) {
                     self.player1.isTurn = true
                     self.player2.isTurn = false
                 }
+
+                var viewB = ''
+
+                for (var i = 0; i < 6; i++) {
+                    // for (var j = 0; j < 7; j++)
+                    viewB += JSON.stringify(self.board[i]) + '\n'
+                }
+
+                console.log(viewB)
+
                 // incrment turns and call new turn
                 self.turns++
                 self.turn()
