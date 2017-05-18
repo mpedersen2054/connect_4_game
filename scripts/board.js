@@ -88,7 +88,7 @@ Board.prototype.dropPeice = function(peice) {
     var xPos = this.ppPos,
         yPos = 5,
         whoseTurn = this.player1.isTurn ? 1 : 2,
-        switchTurns = true,
+        viableMove = true,
         peiceCords
 
     // check if the bottom row contains a peice
@@ -130,25 +130,34 @@ Board.prototype.dropPeice = function(peice) {
     // if the column is full
     else {
         console.log('cant move at the x pos')
-        switchTurns = false
+        viableMove = false
     }
 
     // run only as long as the column isnt full
-    if (switchTurns) {
+    if (viableMove) {
         var self = this
         // dont want to turn it off if switchTurn = false,
         // if they try to put peice above top wont allow
         $('body').off()
 
         // check if there are 4 connected for the give user
-        this.checkIfConnect(peiceCords, function(statement, isOver, winner) {
+        this.checkIfConnect(
+            peiceCords,
+            whoseTurn === 1 ? this.player1 : this.player2,
+            function(statement, isOver, winner, data) {
+
+            console.log('inside callback in dropPeice', statement, isOver, winner, data)
 
             // the game is over, either stalemate or winner
             if (isOver) {
                 if (statement === 'stalemate') {
                     console.log('there was a stalemate')
+                    console.log(statement, isOver, winner, data)
+                    this.endGame('stalemate', null)
                 } else if (statement === 'victory') {
                     console.log(`game over! ${winner.name} won the game!`)
+                    console.log(statement, isOver, winner, data)
+                    this.endGame('victory', winner, data)
                     // handle giving the player a win
                 }
 
@@ -161,17 +170,6 @@ Board.prototype.dropPeice = function(peice) {
                     self.player1.isTurn = true
                     self.player2.isTurn = false
                 }
-
-                var viewB = ''
-
-                for (var i = 0; i < 6; i++) {
-                    // for (var j = 0; j < 7; j++)
-                    viewB += JSON.stringify(self.board[i]) + '\n'
-                }
-
-                console.log(viewB)
-
-                // incrment turns and call new turn
                 self.turns++
                 self.turn()
             }
@@ -180,11 +178,131 @@ Board.prototype.dropPeice = function(peice) {
 
 }
 
-Board.prototype.checkIfConnect = function(cords, callback) {
-    callback(null, null, null)
+Board.prototype.checkIfConnect = function(cords, player, callback) {
+    var y = cords[0],
+        x = cords[1],
+        board = this.board,
+        checkId = player.id,
+        count = 1,
+        connectArr = [ [y, x] ]
+
+        // going to check clockwise starting at 12:00
+
+        // check up right
+        // [y - 1][x + 1]
+        if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId) {
+            console.log('THE NEXT UP RIGHT IS A MATCH!')
+            for (var k = 1; k < 4; k++) {
+                if (board[y - k] && board[y - k][x + k] && board[y - k][x + k] === checkId) {
+                    connectArr.push([y - k, x + k])
+                    count++
+                } else {
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check right
+        // [y][x + 1]
+        if (board[y][x + 1] && board[y][x + 1] === checkId) {
+            for (var k = 1; k < 4; k++) {
+                if (board[y][x + k] && board[y][x + k] === checkId) {
+                    connectArr.push([y, x + k])
+                    count++
+                } else {
+                    connectArr = [ [y, x] ]
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check down right
+        // [y + 1][x + 1]
+        if (board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
+            console.log('THE NEXT DOWN RIGHT IS A MATCH!')
+            for (var k = 1; k < 4; k++) {
+                if (board[y + k] && board[y + k][x + k] && board[y + k][x + k] === checkId) {
+                    connectArr.push([y + k, x + k])
+                    count++
+                } else {
+                    connectArr = [ [y, x] ]
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check down
+        // [y + 1][x]
+        if (board[y + 1] && board[y + 1][x] === checkId) {
+            console.log('THE NEXT DOWN IS A MATCH!')
+            for (var k = 1; k < 4; k++) {
+                if (board[y + k] && board[y + k][x] === checkId) {
+                    connectArr.push([y + k, x])
+                    count++
+                } else {
+                    connectArr = [ [y, x] ]
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check down left
+        // [y + 1][x - 1]
+        if (board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {
+            console.log('THE NEXT DOWN LEFT IS A MATCH!')
+            for (var k = 1; k < 4; k++) {
+                if (board[y + k] && board[y + k][x - k] && board[y + k][x - k] === checkId) {
+                    connectArr.push([y + k, x - k])
+                    count++
+                } else {
+                    connectArr = [ [y, x] ]
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check left
+        // [y][x - 1]
+        if (board[y][x - 1] && board[y][x - 1] === checkId) {
+            console.log('THE NEXT LEFT IS A MATCH!')
+            for (var k = 1; k < 4; k++) {
+                if (board[y][x - k] && board[y][x - k] === checkId) {
+                    connectArr.push([y, x - k])
+                    count++
+                } else {
+                    connectArr = [ [y, x] ]
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check up left
+        // [y - 1][x - 1]
+        if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1] === checkId) {
+            console.log('THE NEXT UP LEFT IS A MATCH!')
+            for (var k = 1; k < 4; k++) {
+                if (board[y - k] && board[y - k][x - k] && board[y - k][x - k] === checkId) {
+                    connectArr.push([y - k, x - k])
+                    count++
+                } else {
+                    connectArr = [ [y, x] ]
+                    count = 1
+                    break
+                }
+            }
+        }
+        // check the count
+        if (count === 4) {
+            callback('victory', true, player, {
+                connections: connectArr
+            })
+        } else {
+            console.log('NO VICTORY')
+            callback(null, false, null, null)
+        }
 }
 
-Board.prototype.endGame = function(outcome, victor) {
+Board.prototype.endGame = function(outcome, victor, data) {
     // stalemate
     if (outcome === 'stalemate') {
         // console.log('THERE WAS A STALEMATE!')
