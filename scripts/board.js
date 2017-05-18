@@ -25,6 +25,9 @@ Board.prototype.turn = function() {
     this.peicePlacer = [ 1, 0, 0, 0, 0, 0, 0 ]
     this.ppPos = 0
 
+    // update the 'turn count' div
+    $('.turn-count').html(this.turns)
+
     // handle case if the board is completely full
     if (this.turns === 43) {
         this.endGame('stalemate', null)
@@ -39,8 +42,6 @@ Board.prototype.turn = function() {
             peice = new Peice({ color: 'black' })
         }
 
-        // update the 'turn count' div
-        $('.turn-count').html(this.turns)
         this.handleMovement(peice)
     }
 }
@@ -133,45 +134,50 @@ Board.prototype.dropPeice = function(peice) {
         $('body').off()
 
         // check if there are 4 connected for the give user
-        this.checkIfConnect(function(statemate, isOver, winner) {
-            console.log('inside check if connect!')
-            console.log('stalemate?', statemate)
-            console.log('isOver?', isOver)
-            // switch whose turn it is
-            if (self.player1.isTurn) {
-                self.player1.isTurn = false
-                self.player2.isTurn = true
-            } else if (self.player2.isTurn) {
-                self.player1.isTurn = true
-                self.player2.isTurn = false
+        this.checkIfConnect(function(statement, isOver, winner) {
+
+            // the game is over, either stalemate or winner
+            if (isOver) {
+                if (statement === 'stalemate') {
+                    console.log('there was a stalemate')
+                } else if (statement === 'victory') {
+                    console.log(`game over! ${winner.name} won the game!`)
+                    // handle giving the player a win
+                }
+
+            // game is not over
+            } else {
+                if (self.player1.isTurn) {
+                    self.player1.isTurn = false
+                    self.player2.isTurn = true
+                } else if (self.player2.isTurn) {
+                    self.player1.isTurn = true
+                    self.player2.isTurn = false
+                }
+                // incrment turns and call new turn
+                self.turns++
+                self.turn()
             }
-            // incrment turns and call new turn
-            self.turns++
-            self.turn()
         })
     }
 
 }
 
 Board.prototype.checkIfConnect = function(callback) {
-    console.log('isside of checkIfConnect!')
     callback(null, null, null)
-    // setTimeout(function() {
-    //     callback(null, null)
-    // }, 1000)
 }
 
 Board.prototype.endGame = function(outcome, victor) {
     // stalemate
     if (outcome === 'stalemate') {
-        console.log('THERE WAS A STALEMATE!')
+        // console.log('THERE WAS A STALEMATE!')
     } else if (outcome === 'victory') {
         // p1 victory
         if (victor === this.player1) {
-            console.log('CONGRATS PLAYER1')
+            // console.log('CONGRATS PLAYER1')
         // p2 victory
         } else if (victor === this.player2) {
-            console.log('CONGRATS PLAYER2')
+            // console.log('CONGRATS PLAYER2')
         }
     }
 }
