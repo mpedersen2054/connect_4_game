@@ -88,37 +88,44 @@ Board.prototype.dropPeice = function(peice) {
     var xPos = this.ppPos,
         yPos = 5,
         whoseTurn = this.player1.isTurn ? 1 : 2,
-        switchTurns = true
+        switchTurns = true,
+        peiceCords
 
     // check if the bottom row contains a peice
     if (this.board[yPos][xPos] === 0) {
         this.board[yPos][xPos] = whoseTurn
         peice.move('down', yPos)
+        peiceCords = [yPos, ppPos]
 
     // check if the row above bottom has a peice
     } else if (this.board[yPos - 1][xPos] === 0) {
         this.board[yPos - 1][xPos] = whoseTurn
         peice.move('down', yPos - 1)
+        peiceCords = [yPos - 1, ppPos]
 
     // check if the 2 rows above bottom has a peice
     } else if (this.board[yPos - 2][xPos] === 0) {
         this.board[yPos - 2][xPos] = whoseTurn
         peice.move('down', yPos - 2)
+        peiceCords = [yPos - 2, ppPos]
 
     // check if the 3 rows above bottom has a peice
     } else if (this.board[yPos - 3][xPos] === 0) {
         this.board[yPos - 3][xPos] = whoseTurn
         peice.move('down', yPos - 3)
+        peiceCords = [yPos - 3, ppPos]
 
     // check if the 4 rows above bottom has a peice
     } else if (this.board[yPos - 4][xPos] === 0) {
         this.board[yPos - 4][xPos] = whoseTurn
         peice.move('down', yPos - 4)
+        peiceCords = [yPos - 4, ppPos]
 
     // check if the 5 rows above bottom has a peice
     } else if (this.board[yPos - 5][xPos] === 0) {
         this.board[yPos - 5][xPos] = whoseTurn
         peice.move('down', yPos - 5)
+        peiceCords = [yPos - 5, ppPos]
     }
     // if the column is full
     else {
@@ -134,7 +141,7 @@ Board.prototype.dropPeice = function(peice) {
         $('body').off()
 
         // check if there are 4 connected for the give user
-        this.checkIfConnect(function(statement, isOver, winner) {
+        this.checkIfConnect(peiceCords, function(statement, isOver, winner) {
 
             // the game is over, either stalemate or winner
             if (isOver) {
@@ -173,7 +180,7 @@ Board.prototype.dropPeice = function(peice) {
 
 }
 
-Board.prototype.checkIfConnect = function(callback) {
+Board.prototype.checkIfConnect = function(cords, callback) {
     callback(null, null, null)
 }
 
