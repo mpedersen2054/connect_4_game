@@ -56,6 +56,18 @@ Game.prototype.init = function() {
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="col-lg-12">
+                                <div class="game-info">
+                                    <div class="card">
+                                        <div class="card-block">
+                                            <p class="card-text">
+                                                Turn count: <b class="turn-count">0</b>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
