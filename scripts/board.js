@@ -30,7 +30,7 @@ Board.prototype.turn = function() {
 
     // handle case if the board is completely full
     if (this.turns === 43) {
-        this.endGame('stalemate', null)
+        this.endGame('stalemate', null, null)
     } else {
         // first players turn ( red )
         if (this.turns === 1 || this.player1.isTurn) {
@@ -187,16 +187,24 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         connectArr = [ [y, x] ]
 
         // going to check clockwise starting at 12:00
+        // each direction looks similar so only commenting 1st
 
         // check up right
         // [y - 1][x + 1]
+        // first make sure the element exists in array, then check if it matches
         if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId) {
-            console.log('THE NEXT UP RIGHT IS A MATCH!')
+            // loops 3 more times, +1 will already be the coords passed into func
             for (var k = 1; k < 4; k++) {
+                // see if the formula for the direction (+/-) current iteration === checkId
                 if (board[y - k] && board[y - k][x + k] && board[y - k][x + k] === checkId) {
+                    // push the coords into arr if it matches
                     connectArr.push([y - k, x + k])
+                    // inc the count
                     count++
                 } else {
+                    // reset the connectArr & count, break
+                    // out of loop and go to next conditional
+                    connectArr = [ [y, x] ]
                     count = 1
                     break
                 }
@@ -219,7 +227,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         // check down right
         // [y + 1][x + 1]
         if (board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
-            console.log('THE NEXT DOWN RIGHT IS A MATCH!')
             for (var k = 1; k < 4; k++) {
                 if (board[y + k] && board[y + k][x + k] && board[y + k][x + k] === checkId) {
                     connectArr.push([y + k, x + k])
@@ -234,7 +241,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         // check down
         // [y + 1][x]
         if (board[y + 1] && board[y + 1][x] === checkId) {
-            console.log('THE NEXT DOWN IS A MATCH!')
             for (var k = 1; k < 4; k++) {
                 if (board[y + k] && board[y + k][x] === checkId) {
                     connectArr.push([y + k, x])
@@ -249,7 +255,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         // check down left
         // [y + 1][x - 1]
         if (board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {
-            console.log('THE NEXT DOWN LEFT IS A MATCH!')
             for (var k = 1; k < 4; k++) {
                 if (board[y + k] && board[y + k][x - k] && board[y + k][x - k] === checkId) {
                     connectArr.push([y + k, x - k])
@@ -264,7 +269,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         // check left
         // [y][x - 1]
         if (board[y][x - 1] && board[y][x - 1] === checkId) {
-            console.log('THE NEXT LEFT IS A MATCH!')
             for (var k = 1; k < 4; k++) {
                 if (board[y][x - k] && board[y][x - k] === checkId) {
                     connectArr.push([y, x - k])
@@ -279,7 +283,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         // check up left
         // [y - 1][x - 1]
         if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1] === checkId) {
-            console.log('THE NEXT UP LEFT IS A MATCH!')
             for (var k = 1; k < 4; k++) {
                 if (board[y - k] && board[y - k][x - k] && board[y - k][x - k] === checkId) {
                     connectArr.push([y - k, x - k])
