@@ -1,25 +1,25 @@
 
 // UP RIGHT VICTORY
-var board = [
-    [0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0],
-    [0,0,0,0,0,2,0],
-    [0,0,0,0,2,1,0],
-    [1,0,0,2,2,2,0],
-    [1,0,2,1,1,1,0],
-]
-var lastPeice = [5, 2]
-
-// // RIGHT VICTORY
 // var board = [
 //     [0,0,0,0,0,0,0],
 //     [0,0,0,0,0,0,0],
 //     [0,0,0,0,0,2,0],
-//     [0,1,1,0,0,1,0],
-//     [2,2,2,2,0,1,0],
-//     [2,1,2,1,2,1,1],
+//     [0,0,0,0,2,1,0],
+//     [1,0,0,2,2,2,0],
+//     [1,0,2,1,1,1,0],
 // ]
-// var lastPeice = [4, 0]
+// var lastPeice = [5, 2]
+
+// RIGHT VICTORY
+var board = [
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,0,0],
+    [0,0,0,0,0,2,0],
+    [0,1,1,0,0,1,0],
+    [2,2,2,2,0,1,0],
+    [2,1,2,1,2,1,1],
+]
+var lastPeice = [4, 0]
 
 // // DOWN RIGHT VICTORY
 // var board = [
@@ -91,11 +91,30 @@ function checker(y, x) {
     // [y - 1][x + 1]
     if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId) {
         console.log('THE NEXT UP RIGHT IS A MATCH!')
+        for (var k = 1; k < 4; k++) {
+            if (board[y - k][x + k] === checkId) {
+                connectArr.push([y - k, x + k])
+                count++
+            } else {
+                count = 1
+                break
+            }
+        }
     }
 
     // check right
     // [y][x + 1]
-    if (board[y][x + 1] && board[y][x + 1] === checkId) {}
+    if (board[y][x + 1] && board[y][x + 1] === checkId) {
+        for (var k = 1; k < 4; k++) {
+            if (board[y][x + k] === checkId) {
+                connectArr.push([y, x + k])
+                count++
+            } else {
+                count = 1
+                break
+            }
+        }
+    }
 
     // check down right
     // [y + 1][x + 1]
