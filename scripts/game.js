@@ -1,10 +1,18 @@
 
 var Game = function(opts) {
-    this.player1 = opts.player1 || new Player({ id: 1, name: prompt('Name of the first player?') })
-    this.player2 = opts.player2 || new Player({ id: 2, name: prompt('Name of the second player?') })
-    // this.player1 = new Player({ id: 1, name: 'Matt', wins: 0, isTurn: false })
-    // this.player2 = new Player({ id: 2, name: 'Enemy', wins: 0, isTurn: false })
-    this.board = new Board({ player1: this.player1, player2: this.player2 })
+    // this.player1 = opts.player1 || new Player({ id: 1, name: prompt('Name of the first player?') })
+    // this.player2 = opts.player2 || new Player({ id: 2, name: prompt('Name of the second player?') })
+    this.player1 = opts.player1 || new Player({ id: 1, name: 'Matt', wins: 0, isTurn: false })
+    this.player2 = opts.player2 || new Player({ id: 2, name: 'Enemy', wins: 0, isTurn: false })
+    this.gamesPlayed = opts.gamesPlayed || 0
+
+    this.board = new Board({
+        player1: this.player1,
+        player2: this.player2,
+        gamesPlayed: this.gamesPlayed
+    })
+
+    console.log(opts)
 }
 
 Game.prototype.init = function() {
@@ -62,7 +70,8 @@ Game.prototype.init = function() {
                                     <div class="card">
                                         <div class="card-block">
                                             <p class="card-text">
-                                                Turn count: <b class="turn-count">0</b>
+                                                Turn count: <b class="turn-count">0</b> <br/>
+                                                Game count: <b>${this.gamesPlayed}</b>
                                             </p>
                                         </div>
                                     </div>

@@ -2,6 +2,7 @@
 var Board = function(opts) {
     this.player1 = opts.player1
     this.player2 = opts.player2
+    this.gamesPlayed = opts.gamesPlayed
     this.turns = 1
 
     this.ppPos = 3
@@ -330,7 +331,11 @@ Board.prototype.endGame = function(outcome, victor, data) {
             $('.board, .peice-placer').empty()
             self.player1.isTurn = false
             self.player2.isTurn = false
-            new Game({ player1: self.player1, player2: self.player2 }).init()
+            new Game({
+                player1: self.player1,
+                player2: self.player2,
+                gamesPlayed: self.gamesPlayed + 1
+            }).init()
         } else {
             // handle dont play again... (prob wont do much, could be useful when adding backend)
         }
