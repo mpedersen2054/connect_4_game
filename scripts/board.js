@@ -4,7 +4,7 @@ var Board = function(opts) {
     this.player2 = opts.player2
     this.turns = 1
 
-    this.ppPos = 0
+    this.ppPos = 3
     this.peicePlacer = [
         0, 0, 0, 0, 0, 0, 0
     ]
@@ -14,16 +14,15 @@ var Board = function(opts) {
         [ 0, 0, 0, 0, 0, 0, 0 ],
         [ 0, 0, 0, 0, 0, 0, 0 ],
         [ 0, 0, 0, 0, 0, 0, 0 ],
-        [ 0, 0, 0, 0, 0, 0, 0 ],
-        // [ 0, 0, 0, 0, 0, 0, 0 ]
+        [ 0, 0, 0, 0, 0, 0, 0 ]
     ]
 }
 
 Board.prototype.turn = function() {
     var peice
     // reset the peicePlacer & peicePlacer position
-    this.peicePlacer = [ 1, 0, 0, 0, 0, 0, 0 ]
-    this.ppPos = 0
+    this.peicePlacer = [ 0, 0, 0, 1, 0, 0, 0 ]
+    this.ppPos = 3
 
     // update the 'turn count' div
     $('.turn-count').html(this.turns)
@@ -64,6 +63,7 @@ Board.prototype.handleMovement = function(peice) {
         // move the peice to the right if right arrow pressed
         } else if (e.keyCode === rArrow) {
             e.preventDefault()
+            // update the peicePlacer arr, including the ppPos
             self.peicePlacer[self.ppPos] = 0
             self.ppPos += 1
             self.peicePlacer[self.ppPos] = 1
@@ -92,6 +92,9 @@ Board.prototype.dropPeice = function(peice) {
         peiceCords
 
     // check if the bottom row contains a peice
+    // if it doesnt, update the board to place a
+    // 1/2 at the bottom at the xPos, assign
+    // peiceCords to be passed into checkIfConnect
     if (this.board[yPos][xPos] === 0) {
         this.board[yPos][xPos] = whoseTurn
         peice.move('down', yPos)
@@ -151,14 +154,11 @@ Board.prototype.dropPeice = function(peice) {
             // the game is over, either stalemate or winner
             if (isOver) {
                 if (statement === 'stalemate') {
-                    console.log('there was a stalemate')
-                    console.log(statement, isOver, winner, data)
-                    this.endGame('stalemate', null)
+                    // calls endgame telling it stalemate
+                    self.endGame('stalemate', null, null)
                 } else if (statement === 'victory') {
-                    console.log(`game over! ${winner.name} won the game!`)
-                    console.log(statement, isOver, winner, data)
-                    this.endGame('victory', winner, data)
-                    // handle giving the player a win
+                    // handle victory condition passing the winner & data
+                    self.endGame('victory', winner, data)
                 }
 
             // game is not over
@@ -191,7 +191,8 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
 
         // check up right
         // [y - 1][x + 1]
-        // first make sure the element exists in array, then check if it matches
+        // first make sure the element to the up&right of recent placed
+        // peice exists in array, then check if it matches the users id
         if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId) {
             // loops 3 more times, +1 will already be the coords passed into func
             for (var k = 1; k < 4; k++) {
@@ -294,7 +295,8 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 }
             }
         }
-        // check the count
+        // if connect 4 send data via cb that will
+        // trigger endGame('victory'), other cond will trigger next turn
         if (count === 4) {
             callback('victory', true, player, {
                 connections: connectArr
@@ -306,16 +308,24 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
 }
 
 Board.prototype.endGame = function(outcome, victor, data) {
-    // stalemate
+    var confirmMsg
     if (outcome === 'stalemate') {
-        // console.log('THERE WAS A STALEMATE!')
+        confirmMsg = 'No one wins. Play again?'
     } else if (outcome === 'victory') {
-        // p1 victory
+        // up here add code to maybe so a line where there was the connect4?
         if (victor === this.player1) {
-            // console.log('CONGRATS PLAYER1')
-        // p2 victory
+            confirmMsg = `${this.player1.name} now has ${this.player1.wins} wins. Play again?`
         } else if (victor === this.player2) {
-            // console.log('CONGRATS PLAYER2')
+            confirmMsg = `${this.player2.name} now has ${this.player2.wins} wins. Play again?`
         }
     }
+    // had to use this similar to process.nextTick in node,
+    // or else it wouldnt drop the last peice that won the game
+    setTimeout(function() {
+        if (confirm('Do you want to play again?') === true) {
+            // handle play again
+        } else {
+            // handle dont play again... (prob wont do much, could be useful when adding backend)
+        }
+    }, 100)
 }

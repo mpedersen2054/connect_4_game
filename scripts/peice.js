@@ -2,11 +2,10 @@
 var Peice = function(opts) {
     this.color = opts.color
     this.peiceSize = 92
-    this.leftPos = 5
-    this.topPos = 2.5
-    // this.topPos = 105
     this.leftMoveAmt = 99.5
     this.topMoveAmt = 100
+    this.leftPos = 5 + (this.leftMoveAmt * 3)
+    this.topPos = 2.5
 
     // create the new peice & append it to peice-placer
     this.peice = $('<div/>')
