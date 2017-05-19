@@ -53,7 +53,6 @@ Board.prototype.handleMovement = function(peice) {
         self   = this
 
     $('body').on('keydown', function(e) {
-        console.log('KEY WAS DOWNED!!!')
         // if the peice is at the furthest left, dont let it move left
         if (e.keyCode === rArrow && self.peicePlacer[6] === 1) {
             console.log('cant move right!')
