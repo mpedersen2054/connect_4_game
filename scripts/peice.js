@@ -39,8 +39,12 @@ Peice.prototype.move = function(direction, dist) {
     if (direction === 'down') {
         var dropDist = dist * this.topMoveAmt
         // this.topPos = dropDist
-        this.peice.css({
-            top: `${this.topPos + dropDist + 100}px`
+        var peice = this.peice.detach()
+        $('.board').append(peice)
+        peice.css({
+            top: `${this.topPos + dropDist}px`
         })
     }
+
+    // console.log('movement in Peice', this.peice, this.peice.css(['left', 'top']))
 }

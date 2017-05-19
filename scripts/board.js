@@ -52,6 +52,7 @@ Board.prototype.handleMovement = function(peice) {
         self   = this
 
     $('body').on('keydown', function(e) {
+        console.log('KEY WAS DOWNED!!!')
         // if the peice is at the furthest left, dont let it move left
         if (e.keyCode === rArrow && self.peicePlacer[6] === 1) {
             console.log('cant move right!')
@@ -149,7 +150,7 @@ Board.prototype.dropPeice = function(peice) {
             whoseTurn === 1 ? this.player1 : this.player2,
             function(statement, isOver, winner, data) {
 
-            console.log('inside callback in dropPeice', statement, isOver, winner, data)
+            // console.log('inside callback in dropPeice', statement, isOver, winner, data)
 
             // the game is over, either stalemate or winner
             if (isOver) {
@@ -308,22 +309,28 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
 }
 
 Board.prototype.endGame = function(outcome, victor, data) {
-    var confirmMsg
+    var confirmMsg, self = this
     if (outcome === 'stalemate') {
         confirmMsg = 'No one wins. Play again?'
     } else if (outcome === 'victory') {
         // up here add code to maybe so a line where there was the connect4?
         if (victor === this.player1) {
+            this.player1.wins++
             confirmMsg = `${this.player1.name} now has ${this.player1.wins} wins. Play again?`
         } else if (victor === this.player2) {
+            this.player2.wins++
             confirmMsg = `${this.player2.name} now has ${this.player2.wins} wins. Play again?`
         }
     }
     // had to use this similar to process.nextTick in node,
     // or else it wouldnt drop the last peice that won the game
     setTimeout(function() {
-        if (confirm('Do you want to play again?') === true) {
+        if (confirm(confirmMsg) === true) {
             // handle play again
+            $('.board, .peice-placer').empty()
+            self.player1.isTurn = false
+            self.player2.isTurn = false
+            new Game({ player1: self.player1, player2: self.player2 }).init()
         } else {
             // handle dont play again... (prob wont do much, could be useful when adding backend)
         }
