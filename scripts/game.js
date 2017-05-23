@@ -42,6 +42,18 @@ Game.prototype.init = function() {
                         Game count: <b>${this.gamesPlayed}</b>
                     </p>
                 </div>
+                <div class="game-directions">
+                    <div class="key left-key">
+                        <i class="fa fa-caret-square-o-left" aria-hidden="true"></i> : Move peice left
+                    </div>
+                    <div class="key right-key">
+                        <i class="fa fa-caret-square-o-right" aria-hidden="true"></i> : Move peice right
+                    </div>
+
+                    <div class="key right-drop">
+                        SPACE : Drop peice
+                    </div>
+                </div>
             </div>
         </div>
     `
