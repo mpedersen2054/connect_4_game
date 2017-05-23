@@ -213,17 +213,39 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
             }
         }
         // check right
-        // [y][x + 1]
-        if (board[y][x + 1] && board[y][x + 1] === checkId) {
+        // [y][x + 1] || [y][x - 1]
+        if (board[y][x + 1] && board[y][x + 1] === checkId
+            || board[y][x - 1] && board[y][x - 1] === checkId) {
+            var goingLeft = false
             for (var k = 1; k < 4; k++) {
-                if (board[y][x + k] && board[y][x + k] === checkId) {
+                if (count === 4) {
+                    return callback('victory', true, player, {
+                        connections: connectArr
+                    })
+                }
+                if ((board[y][x + k] && board[y][x + k] === checkId) && !goingLeft) {
                     connectArr.push([y, x + k])
                     count++
+                    console.log('MATCH TO THE RIGHT', count)
                 } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
+                    if (board[y][x - 1] && board[y][x - 1] === checkId) {
+                        if (!goingLeft) {
+                            k = 1
+                            goingLeft = true
+                        }
+                        console.log('STARTING TO GO LEFT!', k, count)
+                        if (board[y][x - k] && board[y][x - k] === checkId) {
+                            connectArr.push([y, x - k])
+                            count++
+                            console.log('MATCH TO THE LEFT', count)
+                        } else {
+                            connectArr = [ [y, x] ]
+                            count = 1
+                            break
+                        }
+                    }
                 }
+
             }
         }
         // check down right
@@ -270,18 +292,19 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         }
         // check left
         // [y][x - 1]
-        if (board[y][x - 1] && board[y][x - 1] === checkId) {
-            for (var k = 1; k < 4; k++) {
-                if (board[y][x - k] && board[y][x - k] === checkId) {
-                    connectArr.push([y, x - k])
-                    count++
-                } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
-                }
-            }
-        }
+        // if (board[y][x - 1] && board[y][x - 1] === checkId) {
+        //     console.log('NOW CHECKING LEFT!')
+        //     for (var k = 1; k < 4; k++) {
+        //         if (board[y][x - k] && board[y][x - k] === checkId) {
+        //             connectArr.push([y, x - k])
+        //             count++
+        //         } else {
+        //             connectArr = [ [y, x] ]
+        //             count = 1
+        //             break
+        //         }
+        //     }
+        // }
         // check up left
         // [y - 1][x - 1]
         if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1] === checkId) {
@@ -296,6 +319,9 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 }
             }
         }
+
+        console.log('THE COUNT: ', count, connectArr)
+
         // if connect 4 send data via cb that will
         // trigger endGame('victory'), other cond will trigger next turn
         if (count === 4) {
