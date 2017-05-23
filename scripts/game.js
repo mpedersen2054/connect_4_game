@@ -16,70 +16,35 @@ var Game = function(opts) {
 Game.prototype.init = function() {
     // append the html for the game onto DOM
     var startingHtml = `
-        <div class="container-fluid">
-            <div class="row no-gutters">
-                <div class="col-lg-7 col-md-12 no-gutters">
-                    <div class="game-col">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="peice-placer"></div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="board"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-12 no-gutters">
-                    <div class="game-meta-col">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="title-image">
-                                    Connect 4
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="player player1">
-                                    <div class="card">
-                                        <div class="card-block">
-                                            <h3 class="card-title">${this.player1.name}</h3>
-                                            <p class="card-text">
-                                                <b>Wins:</b> ${this.player1.wins}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="player player2">
-                                    <div class="card">
-                                        <div class="card-block">
-                                            <h3 class="card-title">${this.player2.name}</h3>
-                                            <p class="card-text">
-                                                <b>Wins:</b> ${this.player2.wins}
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="container">
+            <div class="game-col">
+                <div class="peice-placer"></div>
+                <div class="board"></div>
+            </div>
 
-                            <div class="col-lg-12">
-                                <div class="game-info">
-                                    <div class="card">
-                                        <div class="card-block">
-                                            <p class="card-text">
-                                                Turn count: <b class="turn-count">0</b> <br/>
-                                                Game count: <b>${this.gamesPlayed}</b>
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+            <div class="game-meta-col">
+                <div class="title-image">Connect 4</div>
+                <div class="player player1">
+                    <h3>${this.player1.name}</h3>
+                    <p>
+                        Wins: <b>${this.player1.wins}</b>
+                    </p>
+                </div>
+                <div class="player player2">
+                    <h3>${this.player2.name}</h3>
+                    <p>
+                        Wins: <b>${this.player2.wins}</b>
+                    </p>
+                </div>
+                <div class="game-info">
+                    <p>
+                        Turn count: <b class="turn-count">0</b> <br/>
+                        Game count: <b>${this.gamesPlayed}</b>
+                    </p>
                 </div>
             </div>
-        </div>`
+        </div>
+    `
     $('#main').html(startingHtml)
 
     // initiate the turn for the first player
