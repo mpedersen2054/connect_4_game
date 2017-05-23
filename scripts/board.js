@@ -204,7 +204,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                     // add the location into the connectArr & increment count
                     connectArr.push([y - k, x + k])
                     count++
-                    console.log('MATCH AT THE UP RIGHT!', count)
                 } else {
                     // run if there isnt any more to the upright
                     if (board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {
@@ -220,10 +219,8 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                             // add the location into the connectArr & increment count
                             connectArr.push([y + k, x - k])
                             count++
-                            console.log('MATCH AT THE DOWN LEFT', count)
                         // break out of the loop & reset the connectArr if there are no downleft
                         } else {
-                            console.log('NO DOWN LEFT')
                             connectArr = [ [y, x] ]
                             break
                         }
@@ -231,7 +228,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 }
             }
             if (count === 4) {
-                console.log('AT THE BOTTTOM of func!!!!!!')
                 return callback('victory', true, player, {
                     connections: connectArr
                 })
@@ -248,7 +244,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 if ((board[y][x + k] && board[y][x + k] === checkId) && !goingLeft) {
                     connectArr.push([y, x + k])
                     count++
-                    console.log('MATCH TO THE RIGHT', count)
                 } else {
                     if (board[y][x - 1] && board[y][x - 1] === checkId) {
                         if (!goingLeft) {
@@ -256,11 +251,9 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                             goingLeft = true
                         }
                         if (count === 4) break
-                        console.log('STARTING TO GO LEFT!', k, count)
                         if (board[y][x - k] && board[y][x - k] === checkId) {
                             connectArr.push([y, x - k])
                             count++
-                            console.log('MATCH TO THE LEFT', count)
                         } else {
                             connectArr = [ [y, x] ]
                             break
@@ -285,7 +278,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 if ((board[y - k] && board[y - k][x - k] && board[y - k][x - k] === checkId) && !goingLeft) {
                     connectArr.push([y - k, x - k])
                     count++
-                    console.log('MATCHED TO THE UP LEFT!', count)
                 } else {
                     if (board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
                         if (!goingLeft) {
@@ -296,7 +288,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                         if (board[y + k] && board[y + k][x + k] && board[y + k][x + k] === checkId) {
                             connectArr.push([y + k, x + k])
                             count++
-                            console.log('MATCHED DOWN RIGHT!', count)
                         } else {
                             connectArr = [ [y, x] ]
                             break
@@ -310,7 +301,7 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 })
             }
         }
-        
+
         // check down
         // [y + 1][x]
         if (board[y + 1] && board[y + 1][x] === checkId) {
@@ -319,7 +310,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 if (board[y + k] && board[y + k][x] === checkId) {
                     connectArr.push([y + k, x])
                     count++
-                    console.log('MATCHED UP', count)
                 } else {
                     connectArr = [ [y, x] ]
                     break
@@ -331,9 +321,6 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
                 })
             }
         }
-
-        console.log('NO VICTORY')
-        console.log('========================================')
         callback(null, false, null, null)
 }
 
