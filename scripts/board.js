@@ -53,7 +53,6 @@ Board.prototype.handleMovement = function(peice) {
         self   = this
 
     $('body').on('keydown', function(e) {
-        console.log('KEY WAS DOWNED!!!')
         // if the peice is at the furthest left, dont let it move left
         if (e.keyCode === rArrow && self.peicePlacer[6] === 1) {
             console.log('cant move right!')
@@ -185,128 +184,144 @@ Board.prototype.checkIfConnect = function(cords, player, callback) {
         x = cords[1],
         board = this.board,
         checkId = player.id,
-        count = 1,
         connectArr = [ [y, x] ]
 
         // going to check clockwise starting at 12:00
         // each direction looks similar so only commenting 1st
 
-        // check up right
-        // [y - 1][x + 1]
-        // first make sure the element to the up&right of recent placed
-        // peice exists in array, then check if it matches the users id
-        if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId) {
-            // loops 3 more times, +1 will already be the coords passed into func
+        // check up right / down left
+        // [y - 1][x + 1] / [y + 1][x - 1]
+        // if there is a peice to the upright / downleft of the dropped peice
+        if (board[y - 1] && board[y - 1][x + 1] && board[y - 1][x + 1] === checkId ||
+            board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {
+            // init the count, start going upright
+            var goingLeft = false
+            var count = 1
+            // loop to run at least 3 times
             for (var k = 1; k < 4; k++) {
-                // see if the formula for the direction (+/-) current iteration === checkId
-                if (board[y - k] && board[y - k][x + k] && board[y - k][x + k] === checkId) {
-                    // push the coords into arr if it matches
+                // if there is a peice to the upright & goingLeft hasnt been switched
+                if ((board[y - k] && board[y - k][x + k] && board[y - k][x + k] === checkId) && !goingLeft) {
+                    // add the location into the connectArr & increment count
                     connectArr.push([y - k, x + k])
-                    // inc the count
                     count++
                 } else {
-                    // reset the connectArr & count, break
-                    // out of loop and go to next conditional
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
+                    // run if there isnt any more to the upright
+                    if (board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {
+                        // to be run on the first attempt to go right, will make it skip the 'if' above & reset the loop
+                        if (!goingLeft) {
+                            k = 1
+                            goingLeft = true
+                        }
+                        // break out of the loop if we already have 4
+                        if (count === 4) break
+                        // if there is a peice to the downleft
+                        if (board[y + k] && board[y + k][x - k] && board[y + k][x - k] === checkId) {
+                            // add the location into the connectArr & increment count
+                            connectArr.push([y + k, x - k])
+                            count++
+                        // break out of the loop & reset the connectArr if there are no downleft
+                        } else {
+                            connectArr = [ [y, x] ]
+                            break
+                        }
+                    }
                 }
             }
+            if (count === 4) {
+                return callback('victory', true, player, {
+                    connections: connectArr
+                })
+            }
         }
-        // check right
-        // [y][x + 1]
-        if (board[y][x + 1] && board[y][x + 1] === checkId) {
+
+        // check right / left
+        // [y][x + 1] || [y][x - 1]
+        if (board[y][x + 1] && board[y][x + 1] === checkId ||
+            board[y][x - 1] && board[y][x - 1] === checkId) {
+            var goingLeft = false
+            var count = 1
             for (var k = 1; k < 4; k++) {
-                if (board[y][x + k] && board[y][x + k] === checkId) {
+                if ((board[y][x + k] && board[y][x + k] === checkId) && !goingLeft) {
                     connectArr.push([y, x + k])
                     count++
                 } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
+                    if (board[y][x - 1] && board[y][x - 1] === checkId) {
+                        if (!goingLeft) {
+                            k = 1
+                            goingLeft = true
+                        }
+                        if (count === 4) break
+                        if (board[y][x - k] && board[y][x - k] === checkId) {
+                            connectArr.push([y, x - k])
+                            count++
+                        } else {
+                            connectArr = [ [y, x] ]
+                            break
+                        }
+                    }
                 }
             }
+            if (count === 4) {
+                return callback('victory', true, player, {
+                    connections: connectArr
+                })
+            }
         }
-        // check down right
-        // [y + 1][x + 1]
-        if (board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
+
+        // check up left / down right
+        // [y - 1][x - 1]
+        if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1] === checkId ||
+            board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
+            var goingLeft = false
+            var count = 1
             for (var k = 1; k < 4; k++) {
-                if (board[y + k] && board[y + k][x + k] && board[y + k][x + k] === checkId) {
-                    connectArr.push([y + k, x + k])
+                if ((board[y - k] && board[y - k][x - k] && board[y - k][x - k] === checkId) && !goingLeft) {
+                    connectArr.push([y - k, x - k])
                     count++
                 } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
+                    if (board[y + 1] && board[y + 1][x + 1] && board[y + 1][x + 1] === checkId) {
+                        if (!goingLeft) {
+                            k = 1
+                            goingLeft = true
+                        }
+                        if (count === 4) break
+                        if (board[y + k] && board[y + k][x + k] && board[y + k][x + k] === checkId) {
+                            connectArr.push([y + k, x + k])
+                            count++
+                        } else {
+                            connectArr = [ [y, x] ]
+                            break
+                        }
+                    }
                 }
             }
+            if (count === 4) {
+                return callback('victory', true, player, {
+                    connections: connectArr
+                })
+            }
         }
+
         // check down
         // [y + 1][x]
         if (board[y + 1] && board[y + 1][x] === checkId) {
+            var count = 1
             for (var k = 1; k < 4; k++) {
                 if (board[y + k] && board[y + k][x] === checkId) {
                     connectArr.push([y + k, x])
                     count++
                 } else {
                     connectArr = [ [y, x] ]
-                    count = 1
                     break
                 }
             }
-        }
-        // check down left
-        // [y + 1][x - 1]
-        if (board[y + 1] && board[y + 1][x - 1] && board[y + 1][x - 1] === checkId) {
-            for (var k = 1; k < 4; k++) {
-                if (board[y + k] && board[y + k][x - k] && board[y + k][x - k] === checkId) {
-                    connectArr.push([y + k, x - k])
-                    count++
-                } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
-                }
+            if (count === 4) {
+                return callback('victory', true, player, {
+                    connections: connectArr
+                })
             }
         }
-        // check left
-        // [y][x - 1]
-        if (board[y][x - 1] && board[y][x - 1] === checkId) {
-            for (var k = 1; k < 4; k++) {
-                if (board[y][x - k] && board[y][x - k] === checkId) {
-                    connectArr.push([y, x - k])
-                    count++
-                } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
-                }
-            }
-        }
-        // check up left
-        // [y - 1][x - 1]
-        if (board[y - 1] && board[y - 1][x - 1] && board[y - 1][x - 1] === checkId) {
-            for (var k = 1; k < 4; k++) {
-                if (board[y - k] && board[y - k][x - k] && board[y - k][x - k] === checkId) {
-                    connectArr.push([y - k, x - k])
-                    count++
-                } else {
-                    connectArr = [ [y, x] ]
-                    count = 1
-                    break
-                }
-            }
-        }
-        // if connect 4 send data via cb that will
-        // trigger endGame('victory'), other cond will trigger next turn
-        if (count === 4) {
-            callback('victory', true, player, {
-                connections: connectArr
-            })
-        } else {
-            console.log('NO VICTORY')
-            callback(null, false, null, null)
-        }
+        callback(null, false, null, null)
 }
 
 Board.prototype.endGame = function(outcome, victor, data) {

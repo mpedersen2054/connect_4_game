@@ -1,32 +1,37 @@
 
 // General
 
-// bootstrap overrides
+h1, h2, h3, h4, h5, h6, p
+    margin: 0
+    padding: 0
+    font-family: 'Ubuntu', sans-serif
 
-.container-fluid
-    padding-left: 0
-    padding-right: 0
+h2, h3, h4, h5, h6
+    text-transform: uppercase
+    font-size: 26px
+    text-decoration: underline
+    margin-bottom: 5px
+
+.container
+    padding: 20px
 
 // board related
 
 .game-col
-    padding: 20px
+    width: 760px
 
 .peice-placer
-    // border: 1px solid green
     position: relative
-    max-width: 700px
+    width: 700px
     height: 100px
 
 .board
-    // border: 1px solid yellow
     position: relative
-    max-width: 700px
-    height: 700px
+    width: 700px
+    height: 600px
     background-image: url(http://connect4.gamesolver.org/image?pos=null)
     background-repeat: no-repeat
-    background-size: contain
-    background-position: center
+    background-size: cover
 
 .peice
     position: absolute
@@ -37,17 +42,19 @@
     &.black
         background-color: black
 
+.game-col,
+.game-meta-col
+    display: inline-block
+    vertical-align: top
 
 // game-meta related
-
-.game-meta-col
-    padding: 20px 0
 
 .title-image
     font-family: 'Montserrat Subrayada', sans-serif
     font-size: 56px
-    .red
-        color: red
 
-.player
+.player, .game-info
     margin: 10px 0
+    border: 1px solid #ccc
+    border-radius: 6px
+    padding: 15px 30px
